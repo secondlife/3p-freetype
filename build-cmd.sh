@@ -56,12 +56,15 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                     # outputs will be found in the same places as before.
                     verdir="vc2013"
                     ;;
+                "170")
+                    verdir="vc2022"
+                    ;;
                 *)
                     echo "Unknown AUTOBUILD_VSVER = '$AUTOBUILD_VSVER'" 1>&2 ; exit 1
                     ;;
             esac
 
-            build_sln "builds/win32/$verdir/freetype.sln" "LIB Release|$AUTOBUILD_WIN_VSPLATFORM"
+            MSYS_NO_PATHCONV=1 msbuild.exe "builds/win32/$verdir/freetype.sln" /p:Configuration="LIB Release" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
 
             mkdir -p "$stage/lib/release"
             cp -a "objs/win32/$verdir"/freetype*.lib "$stage/lib/release/freetype.lib"
