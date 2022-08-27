@@ -64,10 +64,14 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                     ;;
             esac
 
-            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Release" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
+            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Release Static" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
 
             mkdir -p "$stage/lib/release"
-            cp -a "objs/$verdir/$AUTOBUILD_WIN_VSPLATFORM"/freetype*.lib "$stage/lib/release/freetype.lib"
+            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Release Static"/freetype{.lib,.pdb} "$stage/lib/release"
+
+            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Debug Static" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
+            mkdir -p "$stage/lib/debug"
+            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Debug Static"/freetype{.lib,.pdb} "$stage/lib/debug"
 
             mkdir -p "$stage/include/freetype2/"
             cp -a include/ft2build.h "$stage/include/"

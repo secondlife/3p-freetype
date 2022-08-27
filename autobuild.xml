@@ -204,7 +204,8 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/release/freetype.lib</string>
+            <string>lib/release/freetype.*</string>
+            <string>lib/debug/freetype.*</string>
           </array>
           <key>name</key>
           <string>windows</string>
