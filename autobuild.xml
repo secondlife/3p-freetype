@@ -73,41 +73,17 @@
         <string>libpng</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>14cb5c8686a472e9e60179e46cd196f7</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libpng_3p-update-libpng/rev/297708/arch/Darwin/installer/libpng-1.6.8.297708-darwin-297708.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>darwin64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2a41acc3116ce19a443873216cb882ad</string>
+              <string>c1c9e32e21f3c34d91ed045b2ca91f24</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/78587/743948/libpng-1.6.8.557046-darwin64-557046.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87781/805801/libpng-1.6.8.563850-darwin64-563850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0758f3cb4c02ebab61854b811b0894e9</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/p64_3p-libpng/rev/314214/arch/Linux/installer/libpng-1.6.8.314214-linux-314214.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
           </map>
           <key>linux64</key>
           <map>
@@ -126,9 +102,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b935b440947f63c69700bdcf5095a8e1</string>
+              <string>642e9cf95c8ccd0eb34f6d7a40df585a</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/78591/743970/libpng-1.6.8.557046-windows-557046.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87782/805831/libpng-1.6.8.563850-windows-563850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -138,16 +114,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d1cc8354ac4e877eefedf16b1be3aac6</string>
+              <string>ce46aa0f171d97626c4a3940347cecd7</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/78589/743991/libpng-1.6.8.557046-windows64-557046.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87780/805832/libpng-1.6.8.563850-windows64-563850.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.6.8.557046</string>
+        <string>1.6.8.563850</string>
       </map>
     </map>
     <key>package_description</key>
