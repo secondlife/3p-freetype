@@ -55,7 +55,7 @@ endif
             $$P $(DESTDIR)$(includedir)/freetype2/freetype/config ; \
         done
 	$(INSTALL_DATA) $(TOP_DIR)/include/ft2build.h                  \
-          $(DESTDIR)$(includedir)/freetype2/ft2build.h
+          $(DESTDIR)$(includedir)/ft2build.h
 	$(INSTALL_DATA) $(OBJ_BUILD)/ftconfig.h                        \
           $(DESTDIR)$(includedir)/freetype2/freetype/config/ftconfig.h
 	$(INSTALL_DATA) $(OBJ_DIR)/ftmodule.h                          \
