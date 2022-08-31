@@ -165,7 +165,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
         ;;
     esac
     mkdir -p "$stage/LICENSES"
-    cp docs/LICENSE.TXT "$stage/LICENSES/freetype.txt"
+    cp LICENSE.TXT "$stage/LICENSES/freetype.txt"
 popd
 
 mkdir -p "$stage"/docs/freetype/
