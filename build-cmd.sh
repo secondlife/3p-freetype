@@ -50,7 +50,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                 "120")
                     verdir="vc2013"
                     ;;
-                "150")
+                "150"|"160")
                     # We have not yet updated the .sln and .vcxproj files for
                     # VS 2017. Until we do, those projects and their build
                     # outputs will be found in the same places as before.
