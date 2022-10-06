@@ -52,9 +52,9 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                     ;;
                 "150"|"160")
                     # We have not yet updated the .sln and .vcxproj files for
-                    # VS 2017. Until we do, those projects and their build
+                    # VS 2019. Until we do, those projects and their build
                     # outputs will be found in the same places as before.
-                    verdir="vc2013"
+                    verdir="vc2017"
                     ;;
                 "170")
                     verdir="vc2022"
