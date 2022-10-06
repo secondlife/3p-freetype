@@ -47,24 +47,27 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             load_vsvars
 
             case "$AUTOBUILD_VSVER" in
-                "120")
-                    verdir="vc2013"
-                    ;;
                 "150")
                     # We have not yet updated the .sln and .vcxproj files for
                     # VS 2017. Until we do, those projects and their build
                     # outputs will be found in the same places as before.
-                    verdir="vc2013"
+                    toolset="v141"
+                    ;;
+                "170")
+                    toolset="v143"
                     ;;
                 *)
                     echo "Unknown AUTOBUILD_VSVER = '$AUTOBUILD_VSVER'" 1>&2 ; exit 1
                     ;;
             esac
 
-            build_sln "builds/win32/$verdir/freetype.sln" "LIB Release|$AUTOBUILD_WIN_VSPLATFORM"
+            msbuild.exe "$(cygpath -w builds/win32/vc2013/freetype.sln)" \
+                -p:Platform=$AUTOBUILD_WIN_VSPLATFORM \
+                -p:Configuration="LIB Release" \
+                -p:PlatformToolset=$toolset
 
             mkdir -p "$stage/lib/release"
-            cp -a "objs/win32/$verdir"/freetype*.lib "$stage/lib/release/freetype.lib"
+            cp -a "objs/win32/vc2013"/freetype*.lib "$stage/lib/release/freetype.lib"
 
             mkdir -p "$stage/include/freetype2/"
             cp -a include/ft2build.h "$stage/include/"
@@ -90,7 +93,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                 LDFLAGS="$opts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
                 ./configure --with-pic \
                 --prefix="$stage" --libdir="$stage"/lib/release/
-            make
+            make -j$(nproc)
             make install
 
             # conditionally run unit tests
@@ -145,7 +148,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                 LDFLAGS="$opts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
                 ./configure --with-pic \
                 --prefix="$stage" --libdir="$stage"/lib/release/
-            make
+            make -j$(nproc)
             make install
 
             # conditionally run unit tests
