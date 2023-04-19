@@ -29,6 +29,9 @@ source_environment_tempfile="$stage/source_environment.sh"
 "$autobuild" source_environment > "$source_environment_tempfile"
 . "$source_environment_tempfile"
 
+# remove_cxxstd
+source "$(dirname "$AUTOBUILD_VARIABLES_FILE")/functions"
+
 [ -f "$stage"/packages/include/zlib-ng/zlib.h ] || fail "You haven't installed packages yet."
 
 # extract APR version into VERSION.txt
@@ -85,12 +88,13 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             # repo                  root                run_tests               suffix
 
             opts="${TARGET_OPTS:--arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD_RELEASE}"
+            plainopts="$(remove_cxxstd $opts)"
 
             # Release
-            CFLAGS="$opts" \
+            CFLAGS="$plainopts" \
                 CXXFLAGS="$opts" \
                 CPPFLAGS="-I$stage/packages/include/zlib-ng" \
-                LDFLAGS="$opts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
+                LDFLAGS="$plainopts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
                 ./configure --with-pic \
                 --prefix="$stage" --libdir="$stage"/lib/release/
             make -j$(nproc)
@@ -131,6 +135,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
 
             # Default target per AUTOBUILD_ADDRSIZE
             opts="${TARGET_OPTS:--m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE}"
+            plainopts="$(remove_cxxstd $opts)"
 
             # Handle any deliberate platform targeting
             if [ -z "${TARGET_CPPFLAGS:-}" ]; then
@@ -142,10 +147,10 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             fi
 
             # Release
-            CFLAGS="$opts" \
+            CFLAGS="$plainopts" \
                 CXXFLAGS="$opts" \
                 CPPFLAGS="-I$stage/packages/include/zlib-ng" \
-                LDFLAGS="$opts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
+                LDFLAGS="$plainopts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
                 ./configure --with-pic \
                 --prefix="$stage" --libdir="$stage"/lib/release/
             make -j$(nproc)
