@@ -1,1 +1,3 @@
-config.mk
+syntax: glob
+stage/
+autobuild-parabuild-bootstrap/
