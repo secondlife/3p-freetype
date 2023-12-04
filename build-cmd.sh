@@ -29,6 +29,9 @@ source_environment_tempfile="$stage/source_environment.sh"
 "$autobuild" source_environment > "$source_environment_tempfile"
 . "$source_environment_tempfile"
 
+# remove_cxxstd
+source "$(dirname "$AUTOBUILD_VARIABLES_FILE")/functions"
+
 [ -f "$stage"/packages/include/zlib-ng/zlib.h ] || fail "You haven't installed packages yet."
 
 # extract APR version into VERSION.txt
@@ -47,31 +50,27 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             load_vsvars
 
             case "$AUTOBUILD_VSVER" in
-                "120")
-                    verdir="vc2013"
-                    ;;
                 "150")
                     # We have not yet updated the .sln and .vcxproj files for
                     # VS 2017. Until we do, those projects and their build
                     # outputs will be found in the same places as before.
-                    verdir="vc2013"
+                    toolset="v141"
                     ;;
                 "170")
-                    verdir="vc2022"
+                    toolset="v143"
                     ;;
                 *)
                     echo "Unknown AUTOBUILD_VSVER = '$AUTOBUILD_VSVER'" 1>&2 ; exit 1
                     ;;
             esac
 
-            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Release Static" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
+            msbuild.exe "$(cygpath -w builds/win32/vc2013/freetype.sln)" \
+                -p:Platform=$AUTOBUILD_WIN_VSPLATFORM \
+                -p:Configuration="LIB Release" \
+                -p:PlatformToolset=$toolset
 
             mkdir -p "$stage/lib/release"
-            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Release Static"/freetype{.lib,.pdb} "$stage/lib/release"
-
-            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Debug Static" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
-            mkdir -p "$stage/lib/debug"
-            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Debug Static"/freetype{.lib,.pdb} "$stage/lib/debug"
+            cp -a "objs/win32/vc2013"/freetype*.lib "$stage/lib/release/freetype.lib"
 
             mkdir -p "$stage/include/freetype2/"
             cp -a include/ft2build.h "$stage/include/"
@@ -89,16 +88,17 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             # repo                  root                run_tests               suffix
 
             opts="${TARGET_OPTS:--arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD_RELEASE}"
+            plainopts="$(remove_cxxstd $opts)"
 
             # Release
-            CFLAGS="$opts" \
+            CFLAGS="$plainopts" \
                 CXXFLAGS="$opts" \
                 CPPFLAGS="-I$stage/packages/include/zlib-ng" \
-                LDFLAGS="$opts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
+                LDFLAGS="$plainopts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
                 ./configure --with-pic \
                 --with-zlib --without-bzip2 \
                 --prefix="$stage" --libdir="$stage"/lib/release/
-            make
+            make -j$(nproc)
             make install
 
             # conditionally run unit tests
@@ -136,6 +136,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
 
             # Default target per AUTOBUILD_ADDRSIZE
             opts="${TARGET_OPTS:--m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE}"
+            plainopts="$(remove_cxxstd $opts)"
 
             # Handle any deliberate platform targeting
             if [ -z "${TARGET_CPPFLAGS:-}" ]; then
@@ -147,13 +148,13 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             fi
 
             # Release
-            CFLAGS="$opts" \
+            CFLAGS="$plainopts" \
                 CXXFLAGS="$opts" \
                 CPPFLAGS="-I$stage/packages/include/zlib-ng" \
-                LDFLAGS="$opts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
+                LDFLAGS="$plainopts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
                 ./configure --with-pic \
                 --prefix="$stage" --libdir="$stage"/lib/release/
-            make
+            make -j$(nproc)
             make install
 
             # conditionally run unit tests

@@ -1,3 +1,3 @@
-freetype/builds/win32/*/x64/*
-freetype/objs/*
-stage/*
+syntax: glob
+stage/
+autobuild-parabuild-bootstrap/
