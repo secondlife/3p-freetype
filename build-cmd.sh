@@ -50,31 +50,31 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             load_vsvars
 
             case "$AUTOBUILD_VSVER" in
-                "120")
-                    verdir="vc2013"
-                    ;;
                 "150")
                     # We have not yet updated the .sln and .vcxproj files for
                     # VS 2017. Until we do, those projects and their build
                     # outputs will be found in the same places as before.
                     verdir="vc2013"
+                    toolset="v141"
                     ;;
                 "170")
                     verdir="vc2022"
+                    toolset="v143"
                     ;;
                 *)
                     echo "Unknown AUTOBUILD_VSVER = '$AUTOBUILD_VSVER'" 1>&2 ; exit 1
                     ;;
             esac
 
-            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Release Static" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
+            msbuild.exe \
+                "$(cygpath -w builds/windows/$verdir/freetype.sln)" \
+                -p:Configuration="Release Static" \
+                -p:Platform="$AUTOBUILD_WIN_VSPLATFORM" \
+                -p:PlatformToolset=$toolset \
+                -t:freetype
 
             mkdir -p "$stage/lib/release"
             cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Release Static"/freetype{.lib,.pdb} "$stage/lib/release"
-
-            MSYS_NO_PATHCONV=1 msbuild.exe "builds/windows/$verdir/freetype.sln" /p:Configuration="Debug Static" /p:Platform="$AUTOBUILD_WIN_VSPLATFORM" /t:freetype
-            mkdir -p "$stage/lib/debug"
-            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Debug Static"/freetype{.lib,.pdb} "$stage/lib/debug"
 
             mkdir -p "$stage/include/freetype2/"
             cp -a include/ft2build.h "$stage/include/"
