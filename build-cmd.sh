@@ -54,9 +54,11 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                     # We have not yet updated the .sln and .vcxproj files for
                     # VS 2017. Until we do, those projects and their build
                     # outputs will be found in the same places as before.
+                    verdir="vc2013"
                     toolset="v141"
                     ;;
                 "170")
+                    verdir="vc2022"
                     toolset="v143"
                     ;;
                 *)
@@ -64,13 +66,15 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                     ;;
             esac
 
-            msbuild.exe "$(cygpath -w builds/win32/vc2013/freetype.sln)" \
-                -p:Platform=$AUTOBUILD_WIN_VSPLATFORM \
-                -p:Configuration="LIB Release" \
-                -p:PlatformToolset=$toolset
+            msbuild.exe \
+                "$(cygpath -w builds/windows/$verdir/freetype.sln)" \
+                -p:Configuration="Release Static" \
+                -p:Platform="$AUTOBUILD_WIN_VSPLATFORM" \
+                -p:PlatformToolset=$toolset \
+                -t:freetype
 
             mkdir -p "$stage/lib/release"
-            cp -a "objs/win32/vc2013"/freetype*.lib "$stage/lib/release/freetype.lib"
+            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Release Static"/freetype{.lib,.pdb} "$stage/lib/release"
 
             mkdir -p "$stage/include/freetype2/"
             cp -a include/ft2build.h "$stage/include/"
@@ -96,6 +100,8 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                 CPPFLAGS="-I$stage/packages/include/zlib-ng" \
                 LDFLAGS="$plainopts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
                 ./configure --with-pic \
+                --with-zlib --without-bzip2 \
+                --without-brotli --without-harfbuzz \
                 --prefix="$stage" --libdir="$stage"/lib/release/
             make -j$(nproc)
             make install
@@ -166,7 +172,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
         ;;
     esac
     mkdir -p "$stage/LICENSES"
-    cp docs/LICENSE.TXT "$stage/LICENSES/freetype.txt"
+    cp LICENSE.TXT "$stage/LICENSES/freetype.txt"
 popd
 
 mkdir -p "$stage"/docs/freetype/
