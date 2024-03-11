@@ -157,7 +157,7 @@ pushd "$FREETYPELIB_SOURCE_DIR"
                 CXXFLAGS="$opts" \
                 CPPFLAGS="-I$stage/packages/include/zlib-ng" \
                 LDFLAGS="$plainopts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
-                ./configure --with-pic \
+                ./configure --with-pic --without-bzip2 \
                 --prefix="$stage" --libdir="$stage"/lib/release/
             make -j$(nproc)
             make install
