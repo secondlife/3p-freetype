@@ -35,9 +35,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>13de93ea11544051b69f238eeb644fd3</string>
+              <string>39d5779fd79e23da16a7b5bf608008999004c828</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/ct2/882/1946/libpng-1.6.8.500873-linux64-500873.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.16.38-d427738/libpng-1.6.38-8318603154-linux64-8318603154.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
