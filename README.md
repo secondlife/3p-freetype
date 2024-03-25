@@ -1,4 +1,4 @@
-# 3p-openssl
+# 3p-freetype
 
 [Autobuild][]-packaged [freetype][]
 
