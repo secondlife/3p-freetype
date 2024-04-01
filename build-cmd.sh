@@ -176,4 +176,3 @@ pushd "$FREETYPELIB_SOURCE_DIR"
 popd
 
 mkdir -p "$stage"/docs/freetype/
-cp -a README.Linden "$stage"/docs/freetype/
