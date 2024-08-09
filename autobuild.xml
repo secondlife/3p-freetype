@@ -167,6 +167,8 @@
       <string>LICENSES/freetype.txt</string>
       <key>name</key>
       <string>freetype</string>
+      <key>use_scm_version</key>
+      <boolean>true</boolean>
       <key>platforms</key>
       <map>
         <key>common</key>
@@ -193,7 +195,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>include/ft2build.h</string>
             <string>include/freetype2/*</string>
             <string>LICENSES/freetype.txt</string>
             <string>docs/freetype/README.Linden</string>
@@ -241,7 +242,6 @@
           <key>manifest</key>
           <array>
             <string>lib/release/lib*.a</string>
-            <string>lib/release/lib*.so*</string>
           </array>
           <key>name</key>
           <string>linux</string>
@@ -269,8 +269,6 @@
           <string>windows</string>
         </map>
       </map>
-      <key>version_file</key>
-      <string>VERSION.txt</string>
     </map>
     <key>type</key>
     <string>autobuild</string>
