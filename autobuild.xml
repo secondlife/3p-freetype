@@ -21,11 +21,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fea8f0684a4ed0a73343651948b13049a135a92a</string>
+              <string>6fe46ed1e2e40616abdacf7115e510645d5f62e7</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.38-ca06e99/libpng-1.6.38-ca06e99-darwin64-ca06e99.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.43-r2/libpng-1.6.43-r2-darwin64-10329429325.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -35,11 +35,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>39d5779fd79e23da16a7b5bf608008999004c828</string>
+              <string>b54a4710d9c3ddfa044e1d29f9c38974e9fc645d</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.16.38-d427738/libpng-1.6.38-8318603154-linux64-8318603154.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.43-r2/libpng-1.6.43-r2-linux64-10329429325.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -63,18 +63,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b91c116a1fda2377954355e56517634db0137699</string>
+              <string>eddb96c73c8916bf71eaa5d0edb812d20e72c255</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.38-ca06e99/libpng-1.6.38-ca06e99-windows64-ca06e99.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.43-r2/libpng-1.6.43-r2-windows64-10329429325.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.6.38-ca06e99</string>
+        <string>1.6.43-r2</string>
       </map>
       <key>zlib-ng</key>
       <map>
@@ -97,11 +97,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dacc5f3fb307c4d1292ed1ffb1d595d83599062d</string>
+              <string>3a6593c71c59ace76d1349483759fcde4b719a76</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v1.2.11.zlib-ng.32fd361/zlib_ng-1.2.11.zlib-ng.32fd361-darwin64-32fd361.tar.zst</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.1-r2/zlib_ng-2.2.1-r2-darwin64-10324415171.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -111,11 +111,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fba88375e12454ae19f4528e11ffc7ddf7d879ec</string>
+              <string>fbadeb0b8c771cb06c0055c9fab6d40c6764dacd</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v1.2.11.zlib-ng.32fd361/zlib_ng-1.2.11.zlib-ng.32fd361-linux64-32fd361.tar.zst</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.1-r2/zlib_ng-2.2.1-r2-linux64-10324415171.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -139,18 +139,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ccfca9451063e2d0e95baa73b1ad2054d3e38907</string>
+              <string>0094031715662be626f5106ff6c814f4fc3dacfa</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v1.2.11.zlib-ng.32fd361/zlib_ng-1.2.11.zlib-ng.32fd361-windows64-32fd361.tar.zst</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.1-r2/zlib_ng-2.2.1-r2-windows64-10324415171.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.2.11.zlib-ng.32fd361</string>
+        <string>2.2.1-r2</string>
       </map>
     </map>
     <key>package_description</key>
@@ -167,6 +167,8 @@
       <string>LICENSES/freetype.txt</string>
       <key>name</key>
       <string>freetype</string>
+      <key>use_scm_version</key>
+      <boolean>true</boolean>
       <key>platforms</key>
       <map>
         <key>common</key>
@@ -193,7 +195,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>include/ft2build.h</string>
             <string>include/freetype2/*</string>
             <string>LICENSES/freetype.txt</string>
             <string>docs/freetype/README.Linden</string>
@@ -241,7 +242,6 @@
           <key>manifest</key>
           <array>
             <string>lib/release/lib*.a</string>
-            <string>lib/release/lib*.so*</string>
           </array>
           <key>name</key>
           <string>linux</string>
@@ -269,8 +269,6 @@
           <string>windows</string>
         </map>
       </map>
-      <key>version_file</key>
-      <string>VERSION.txt</string>
     </map>
     <key>type</key>
     <string>autobuild</string>

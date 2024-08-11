@@ -15,7 +15,7 @@ if [ -z "$AUTOBUILD" ] ; then
     exit 1
 fi
 
-if [ "$OSTYPE" = "cygwin" ] ; then
+if [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]] ; then
     autobuild="$(cygpath -u $AUTOBUILD)"
 else
     autobuild="$AUTOBUILD"
@@ -34,51 +34,35 @@ source "$(dirname "$AUTOBUILD_VARIABLES_FILE")/functions"
 
 [ -f "$stage"/packages/include/zlib-ng/zlib.h ] || fail "You haven't installed packages yet."
 
-# extract APR version into VERSION.txt
-FREETYPE_INCLUDE_DIR="${top}/${FREETYPELIB_SOURCE_DIR}/include/freetype"
-major_version="$(sed -n -E 's/#[[:space:]]*define[[:space:]]+FREETYPE_MAJOR[[:space:]]+([0-9]+)/\1/p' "${FREETYPE_INCLUDE_DIR}/freetype.h")"
-minor_version="$(sed -n -E 's/#[[:space:]]*define[[:space:]]+FREETYPE_MINOR[[:space:]]+([0-9]+)/\1/p' "${FREETYPE_INCLUDE_DIR}/freetype.h")"
-patch_version="$(sed -n -E 's/#[[:space:]]*define[[:space:]]+FREETYPE_PATCH[[:space:]]+([0-9]+)/\1/p' "${FREETYPE_INCLUDE_DIR}/freetype.h")"
-version="${major_version}.${minor_version}.${patch_version}"
-build=${AUTOBUILD_BUILD_ID:=0}
-echo "${version}.${build}" > "${stage}/VERSION.txt"
-
 pushd "$FREETYPELIB_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
 
         windows*)
             load_vsvars
 
-            case "$AUTOBUILD_VSVER" in
-                "150")
-                    # We have not yet updated the .sln and .vcxproj files for
-                    # VS 2017. Until we do, those projects and their build
-                    # outputs will be found in the same places as before.
-                    verdir="vc2013"
-                    toolset="v141"
-                    ;;
-                "170")
-                    verdir="vc2022"
-                    toolset="v143"
-                    ;;
-                *)
-                    echo "Unknown AUTOBUILD_VSVER = '$AUTOBUILD_VSVER'" 1>&2 ; exit 1
-                    ;;
-            esac
+            opts="$(replace_switch /Zi /Z7 $LL_BUILD_RELEASE)"
+            plainopts="$(remove_switch /GR $(remove_cxxstd $opts))"
 
-            msbuild.exe \
-                "$(cygpath -w builds/windows/$verdir/freetype.sln)" \
-                -p:Configuration="Release Static" \
-                -p:Platform="$AUTOBUILD_WIN_VSPLATFORM" \
-                -p:PlatformToolset=$toolset \
-                -t:freetype
+            mkdir -p "build"
+            pushd "build"
+                cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=OFF \
+                    -DCMAKE_C_FLAGS:STRING="$plainopts" \
+                    -DCMAKE_CXX_FLAGS:STRING="$opts" \
+                    -DCMAKE_INSTALL_PREFIX="$(cygpath -m $stage)" \
+                    -DCMAKE_INSTALL_LIBDIR="$(cygpath -m "$stage/lib/release")" \
+                    -DFT_REQUIRE_ZLIB=ON \
+                    -DFT_REQUIRE_PNG=ON \
+                    -DFT_DISABLE_HARFBUZZ=ON \
+                    -DFT_DISABLE_BZIP2=ON \
+                    -DFT_DISABLE_BROTLI=ON \
+                    -DZLIB_INCLUDE_DIR="$(cygpath -m "$stage/packages/include/zlib-ng/")" \
+                    -DZLIB_LIBRARY="$(cygpath -m "$stage/packages/lib/release/zlib.lib")" \
+                    -DPNG_PNG_INCLUDE_DIR="$(cygpath -m "${stage}/packages/include/libpng16/")" \
+                    -DPNG_LIBRARY="$(cygpath -m "${stage}/packages/lib/release/libpng16.lib")"
 
-            mkdir -p "$stage/lib/release"
-            cp -a "objs/$AUTOBUILD_WIN_VSPLATFORM/Release Static"/freetype{.lib,.pdb} "$stage/lib/release"
-
-            mkdir -p "$stage/include/freetype2/"
-            cp -a include/ft2build.h "$stage/include/"
-            cp -a include/freetype "$stage/include/freetype2/"
+                cmake --build . --config Release
+                cmake --install . --config Release
+            popd
         ;;
 
         darwin*)
@@ -94,81 +78,68 @@ pushd "$FREETYPELIB_SOURCE_DIR"
             opts="${TARGET_OPTS:--arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD_RELEASE}"
             plainopts="$(remove_cxxstd $opts)"
 
-            # Release
-            CFLAGS="$plainopts" \
-                CXXFLAGS="$opts" \
-                CPPFLAGS="-I$stage/packages/include/zlib-ng" \
-                LDFLAGS="$plainopts -Wl,-headerpad_max_install_names -L$stage/packages/lib/release -Wl" \
-                ./configure --with-pic \
-                --with-zlib --without-bzip2 \
-                --without-brotli --without-harfbuzz \
-                --prefix="$stage" --libdir="$stage"/lib/release/
-            make -j$(nproc)
-            make install
+            export MACOSX_DEPLOYMENT_TARGET="$LL_BUILD_DARWIN_DEPLOY_TARGET"
 
-            # conditionally run unit tests
-            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
-                # make test
-                echo "No tests"
-            fi
+            mkdir -p "build"
+            pushd "build"
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=OFF \
+                    -DCMAKE_C_FLAGS="$plainopts" \
+                    -DCMAKE_CXX_FLAGS="$opts" \
+                    -DCMAKE_OSX_ARCHITECTURES:STRING=x86_64 \
+                    -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET} \
+                    -DCMAKE_MACOSX_RPATH=YES \
+                    -DCMAKE_INSTALL_PREFIX="$stage" \
+                    -DCMAKE_INSTALL_LIBDIR="$stage/lib/release" \
+                    -DFT_REQUIRE_ZLIB=ON \
+                    -DFT_REQUIRE_PNG=ON \
+                    -DFT_DISABLE_HARFBUZZ=ON \
+                    -DFT_DISABLE_BZIP2=ON \
+                    -DFT_DISABLE_BROTLI=ON \
+                    -DPNG_PNG_INCLUDE_DIR="${stage}/packages/include/libpng16/" \
+                    -DPNG_LIBRARY="${stage}/packages/lib/release/libpng16.a" \
+                    -DZLIB_INCLUDE_DIR="${stage}/packages/include/zlib-ng/" \
+                    -DZLIB_LIBRARY="${stage}/packages/lib/release/libz.a"
 
-            install_name_tool -id "@executable_path/../Resources/libfreetype.6.dylib" "$stage"/lib/release/libfreetype.6.dylib
+                cmake --build . --config Release
+                cmake --install . --config Release
 
-            make distclean
+                # conditionally run unit tests
+                if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                    ctest -C Release
+                fi
+            popd
         ;;
 
         linux*)
-            # Linux build environment at Linden comes pre-polluted with stuff that can
-            # seriously damage 3rd-party builds.  Environmental garbage you can expect
-            # includes:
-            #
-            #    DISTCC_POTENTIAL_HOSTS     arch           root        CXXFLAGS
-            #    DISTCC_LOCATION            top            branch      CC
-            #    DISTCC_HOSTS               build_name     suffix      CXX
-            #    LSDISTCC_ARGS              repo           prefix      CFLAGS
-            #    cxx_version                AUTOBUILD      SIGN        CPPFLAGS
-            #
-            # So, clear out bits that shouldn't affect our configure-directed build
-            # but which do nonetheless.
-            #
-            # unset DISTCC_HOSTS CC CXX CFLAGS CPPFLAGS CXXFLAGS
-
-##          # Prefer gcc-4.6 if available.
-##          if [ -x /usr/bin/gcc-4.6 -a -x /usr/bin/g++-4.6 ]; then
-##              export CC=/usr/bin/gcc-4.6
-##              export CXX=/usr/bin/g++-4.6
-##          fi
-
             # Default target per AUTOBUILD_ADDRSIZE
             opts="${TARGET_OPTS:--m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE}"
             plainopts="$(remove_cxxstd $opts)"
 
-            # Handle any deliberate platform targeting
-            if [ -z "${TARGET_CPPFLAGS:-}" ]; then
-                # Remove sysroot contamination from build environment
-                unset CPPFLAGS
-            else
-                # Incorporate special pre-processing flags
-                export CPPFLAGS="$TARGET_CPPFLAGS"
-            fi
+            mkdir -p "build"
+            pushd "build"
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=OFF \
+                    -DCMAKE_C_FLAGS="$plainopts" \
+                    -DCMAKE_CXX_FLAGS="$opts" \
+                    -DCMAKE_INSTALL_PREFIX="$stage" \
+                    -DCMAKE_INSTALL_LIBDIR="$stage/lib/release" \
+                    -DFT_REQUIRE_ZLIB=ON \
+                    -DFT_REQUIRE_PNG=ON \
+                    -DFT_DISABLE_HARFBUZZ=ON \
+                    -DFT_DISABLE_BZIP2=ON \
+                    -DFT_DISABLE_BROTLI=ON \
+                    -DPNG_PNG_INCLUDE_DIR="${stage}/packages/include/libpng16/" \
+                    -DPNG_LIBRARY="${stage}/packages/lib/release/libpng16.a" \
+                    -DZLIB_INCLUDE_DIR="${stage}/packages/include/zlib-ng/" \
+                    -DZLIB_LIBRARY="${stage}/packages/lib/release/libz.a"
 
-            # Release
-            CFLAGS="$plainopts" \
-                CXXFLAGS="$opts" \
-                CPPFLAGS="-I$stage/packages/include/zlib-ng" \
-                LDFLAGS="$plainopts -L$stage/packages/lib/release -Wl,--exclude-libs,libz" \
-                ./configure --with-pic --without-bzip2 --without-brotli --without-harfbuzz \
-                --prefix="$stage" --libdir="$stage"/lib/release/
-            make -j$(nproc)
-            make install
+                cmake --build . --config Release
+                cmake --install . --config Release
 
-            # conditionally run unit tests
-            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
-                # make test
-                echo "No tests"
-            fi
-
-            make distclean
+                # conditionally run unit tests
+                if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                    ctest -C Release
+                fi
+            popd
         ;;
     esac
     mkdir -p "$stage/LICENSES"
