@@ -21,11 +21,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6fe46ed1e2e40616abdacf7115e510645d5f62e7</string>
+              <string>75ff1513c5527a541bac0b685a90a49afb086156</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.43-r2/libpng-1.6.43-r2-darwin64-10329429325.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.44-r1/libpng-1.6.44-r1-darwin64-11965237099.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -35,46 +35,32 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b54a4710d9c3ddfa044e1d29f9c38974e9fc645d</string>
+              <string>23967758d45afc1e2243c3669ca045945de588a7</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.43-r2/libpng-1.6.43-r2-linux64-10329429325.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.44-r1/libpng-1.6.44-r1-linux64-11965237099.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>c0c487d4dc8ed42b7e9834babb9697bdbf57c534</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.38-ca06e99/libpng-1.6.38-ca06e99-windows-ca06e99.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
           </map>
           <key>windows64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eddb96c73c8916bf71eaa5d0edb812d20e72c255</string>
+              <string>19ac0a301438a0cbe8cb65179ce9e130f5fd827a</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.43-r2/libpng-1.6.43-r2-windows64-10329429325.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.6.44-r1/libpng-1.6.44-r1-windows64-11965237099.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.6.43-r2</string>
+        <string>1.6.44-r1</string>
       </map>
       <key>zlib-ng</key>
       <map>
@@ -97,11 +83,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3a6593c71c59ace76d1349483759fcde4b719a76</string>
+              <string>4d437afc7fc3988cf0c78ed05853a211cc6bf8b8</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.1-r2/zlib_ng-2.2.1-r2-darwin64-10324415171.tar.zst</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.2-r1/zlib_ng-2.2.2-dev0.gcaa101e.d20241120-darwin64-11943461931.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -111,46 +97,32 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fbadeb0b8c771cb06c0055c9fab6d40c6764dacd</string>
+              <string>70c1d8728b85481bd42904c1213ed50264e77be1</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.1-r2/zlib_ng-2.2.1-r2-linux64-10324415171.tar.zst</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.2-r1/zlib_ng-2.2.2-dev0.gcaa101e.d20241120-linux64-11943461931.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>2b5a50b0a3d31a07bc74cb77871ad195eb97c550</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v1.2.11.zlib-ng.32fd361/zlib_ng-1.2.11.zlib-ng.32fd361-windows-32fd361.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
           </map>
           <key>windows64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0094031715662be626f5106ff6c814f4fc3dacfa</string>
+              <string>f98c30b20120511ecceab8bf1b5eba048b10aade</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.1-r2/zlib_ng-2.2.1-r2-windows64-10324415171.tar.zst</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v2.2.2-r1/zlib_ng-2.2.2-dev0.gcaa101e.d20241120-windows64-11943461931.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.2.1-r2</string>
+        <string>2.2.2-r1</string>
       </map>
     </map>
     <key>package_description</key>
